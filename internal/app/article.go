@@ -37,13 +37,17 @@ func (hdl *ArticleHandler) RegistryRouter(router *gin.Engine) {
 	ag.POST("edit", hdl.Edit)
 	ag.POST("publish", hdl.Publish)
 	ag.DELETE("withdraw", hdl.Withdraw)
-	ag.GET("list", hdl.List)
+	// ag.GET("list", hdl.List)
+	ag.POST("list", hdl.List)
 	ag.GET("detail", hdl.Detail)
+	// ag.POST("detail", hdl.Detail)
 
 	// 读者接口
 	pg := router.Group("pub")
-	pg.GET("list", hdl.PubList)
+	// pg.GET("list", hdl.PubList)
+	pg.POST("list", hdl.PubList)
 	pg.GET("detail", hdl.PubDetail, hdl.Read)
+	// pg.POST("detail", hdl.PubDetail, hdl.Read)
 	pg.POST("like", hdl.Like)
 	pg.POST("collect", hdl.Collect)
 	pg.GET("interaction", hdl.Interaction)
@@ -375,7 +379,6 @@ func (hdl *ArticleHandler) PubList(ctx *gin.Context) {
 	// 获取用户 Token
 	_claims, _ := ctx.Get("claims")
 	claims := _claims.(*jwts.CustomClaims)
-
 
 	// 调用下层服务
 	list, err := hdl.svc.PubList(ctx, claims.UserId, req.Limit, req.Offset)

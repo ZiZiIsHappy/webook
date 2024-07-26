@@ -18,7 +18,7 @@ type ArticleDAO interface {
 	SyncStatus(ctx context.Context, uid int64, aid int64, status uint8) error
 	GetListByAuthor(ctx context.Context, uid int64, offset, limit int) ([]Article, error)
 	GetById(ctx context.Context, aid int64) (Article, error)
-	GetPubById(ctx context.Context, aid int64) (PublishedArticle, error) 
+	GetPubById(ctx context.Context, aid int64) (PublishedArticle, error)
 	GetPubList(ctx context.Context, startTime time.Time, offset, limit int) ([]PublishedArticle, error)
 }
 
@@ -38,8 +38,8 @@ func NewArticleDAO(m *gorm.DB, s []*gorm.DB) ArticleDAO {
 // RandSalve 随机获取从数据库
 func (dao *GormArticleDAO) RandSalve() *gorm.DB {
 	rand.Seed(time.Now().UnixNano())
-    randomSlave := dao.slaves[rand.Intn(len(dao.slaves))]
-    return randomSlave
+	randomSlave := dao.slaves[rand.Intn(len(dao.slaves))]
+	return randomSlave
 }
 
 // Insert 往数据库 Article 表中，插入一条新记录
@@ -64,8 +64,8 @@ func (dao *GormArticleDAO) Update(ctx context.Context, article Article) error {
 		Where("id = ? AND author_id = ?", article.Id, article.AuthorId).Updates(map[string]any{
 		"title":   article.Title,
 		"content": article.Content,
-		"status": article.Status,
-		"utime":   now,
+		// "status": article.Status,
+		"utime": now,
 	})
 	if res.Error != nil {
 		return res.Error

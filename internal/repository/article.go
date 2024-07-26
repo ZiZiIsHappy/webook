@@ -58,7 +58,8 @@ func (repo *CacheArticleRepository) Update(ctx context.Context, article domain.A
 		Id:      article.Id,
 		Title:   article.Title,
 		Content: article.Content,
-		Status:  uint8(article.Status),
+		// Status:  uint8(article.Status),
+		AuthorId: article.AuthorId,
 	})
 	if err == nil {
 		// 清除首页缓存
