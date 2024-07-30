@@ -32,8 +32,8 @@ func NewFollowDAO(m *gorm.DB, s []*gorm.DB) FollowDAO {
 
 func (dao *GormFollowDAO) RandSalve() *gorm.DB {
 	rand.Seed(time.Now().UnixNano())
-    randomSlave := dao.slaves[rand.Intn(len(dao.slaves))]
-    return randomSlave
+	randomSlave := dao.slaves[rand.Intn(len(dao.slaves))]
+	return randomSlave
 }
 
 // InsertFollow 往数据库中插入一条记录
@@ -101,7 +101,7 @@ func (dao *GormFollowDAO) DeleteFollow(ctx context.Context, follower_id, followe
 	return dao.master.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 
 		// 软删除用户关注记录
-		err := dao.master.WithContext(ctx).
+		err := dao.master.WithContext(ctx).Model(&FollowRelation{}).
 			Where("follower = ? AND followee = ?", follower_id, followee_id).
 			Updates(map[string]any{
 				"utime":  now,
@@ -166,8 +166,8 @@ func (dao *GormFollowDAO) GetFollowerList(ctx context.Context, followee_id int64
 
 type FollowRelation struct {
 	Id       int64 `gorm:"primaryKey"`
-	Follower int64 `gorm:"not null;uniqueIndex:follower_followee"`// 粉丝
-	Followee int64 `gorm:"not null;uniqueIndex:follower_followee"`// 博主
+	Follower int64 `gorm:"not null;uniqueIndex:follower_followee"` // 粉丝
+	Followee int64 `gorm:"not null;uniqueIndex:follower_followee"` // 博主
 	Status   bool
 	Ctime    int64
 	Utime    int64
